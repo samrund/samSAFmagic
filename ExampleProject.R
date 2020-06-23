@@ -42,8 +42,7 @@ checkFieldNames(mydata)
   #mydata$sex <- "female"
   #mydata$attractant <- NA
   #mydata$trap_type <- "CDCLIGHT"
-  mydata$trap_duration <- 1
-  mydata$vbsp <- "VBsp:0002224"
+
 
 # Remove extraenous fields:
 
