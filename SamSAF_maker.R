@@ -110,7 +110,6 @@ library(ggplot2)
       fixMe <- rbind(list("collection_end_date", "collection_date_end"),fixMe)
       fixMe <- rbind(list("location_description", "location"),fixMe)
       fixMe <- rbind(list("species_comment", "species_description"),fixMe)
-      fixMe <- rbind(list("species", "species_name_out"),fixMe)
       
       print("The following field names were modified (other fields may have had case corrected):")
       
@@ -291,6 +290,7 @@ library(ggplot2)
       dataIn$developmental_stage <- tolower(dataIn$developmental_stage)
       dataIn$developmental_stage[dataIn$developmental_stage=="adults"] <- "adult"
       dataIn$developmental_stage[dataIn$developmental_stage=="larvae"] <- "larva"
+      dataIn$developmental_stage[dataIn$developmental_stage=="pupae"] <- "pupa"
       
       return(dataIn)
     }
@@ -337,6 +337,10 @@ library(ggplot2)
       
       if("larva" %in% mydata$developmental_stage){
         mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000653")) 
+      }
+      
+      if("pupa" %in% mydata$developmental_stage){
+        mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000654")) 
       }
       
       # Sex 
