@@ -1,9 +1,26 @@
 library(dplyr)
 library(maps)
 library(ggplot2)
+library(cowplot)
 
 
 
+    swapLatLong <- function(dataIn){
+      
+      
+      dataIn$Lat <- dataIn$GPS_longitude
+      dataIn$Long <- dataIn$GPS_latitude
+      
+      dataIn$GPS_latitude <- dataIn$Lat 
+      dataIn$GPS_longitude <- dataIn$Long
+      
+      dataIn$Lat <- NULL
+      dataIn$Long <- NULL
+      
+      print("swapLatLong function has been run!!!!!!!!!!!")
+      
+      return(dataIn)
+    }
 
     checkDataForCommonErrors <- function(dataIn){
       
