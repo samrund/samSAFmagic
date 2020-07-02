@@ -59,13 +59,13 @@ library(cowplot)
 
       if("trap_ID" %in% colnames(Thedata)){
         
-        uniquePairsBetweenIDandLong <- unique(Thedata[,c('GPS_latitude','trap_ID')])  # Finds all the combinations between lat and trap_IDs
-        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLong$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLong$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
+        uniquePairsBetweenIDandLat <- unique(Thedata[,c('GPS_latitude','trap_ID')])  # Finds all the combinations between lat and trap_IDs
+        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLat$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLat$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
         problemLats <- subset(countSiteIDsPerLat, x > 1 ) # leave only one with more then one lat per trapID
       
         if(nrow(problemLats) > 0){
           print("ERROR: There are multiple site_IDs sharing the same GPS_latitudes (note if trap_ids are NOT stable year to year, this could be ok. Run checkDataForCommonErrors() after subseting by year ")
-          print(merge(uniquePairsBetweenIDandLong,problemLats)) # determinethe duplicate pairs and print to screen
+          print(merge(uniquePairsBetweenIDandLat,problemLats)) # determinethe duplicate pairs and print to screen
         }
       } 
     
@@ -73,13 +73,13 @@ library(cowplot)
       
       if("location_description" %in% colnames(Thedata)){
         
-        uniquePairsBetweenIDandLong <- unique(Thedata[,c('GPS_latitude','location_description')])  # Finds all the combinations between lat and location descri[tionss
-        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLong$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLong$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
+        uniquePairsBetweenIDandLat <- unique(Thedata[,c('GPS_latitude','location_description')])  # Finds all the combinations between lat and location descri[tionss
+        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLat$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLat$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
         problemLats <- subset(countSiteIDsPerLat, x > 1 ) # leave only one with more then one lat per trapID
         
         if(nrow(problemLats) > 0){
           print("WARNING: There are multiple location_description sharing the same GPS_latitudes")
-          print(merge(uniquePairsBetweenIDandLong,problemLats)) # determinethe duplicate pairs and print to screen
+          print(merge(uniquePairsBetweenIDandLat,problemLats)) # determinethe duplicate pairs and print to screen
         }
       }
     }  
