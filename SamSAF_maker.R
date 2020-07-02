@@ -675,22 +675,37 @@ library(cowplot)
     plotAvgGPSpoints <- function(dataIn){        
       # Plot average point on map to make sure its in right place.
       
-      meanLong <- mean(mydata$GPS_longitude)
-      meanLat <- mean(mydata$GPS_latitude)
+      dataIn <- mydata
+     
+      # Calculate projcet mean lat & long
+        meanLong <- mean(dataIn$GPS_longitude)
+        meanLat <- mean(dataIn$GPS_latitude)
       
-      world<-map_data('world')
-      sf<-data.frame(long=meanLong,lat=meanLat)
-      p <- ggplot(legend=FALSE) +
-        geom_polygon( data=world, aes(x=long, y=lat,group=group)) +
-        xlab("") + ylab("")
-      p <- p + geom_point(data=sf,aes(long,lat),colour="green",size=4)
-      p
-      
+      # Plot histograms of lat/long
+        
+        lat <- ggplot(dataIn, aes(x=GPS_latitude)) + geom_histogram()
+        long <-ggplot(dataIn, aes(x=GPS_longitude)) + geom_histogram()
+        distribution <- ggplot(dataIn, aes(y=GPS_latitude, x=GPS_longitude))+ geom_point()
+        
+        p <- plot_grid(lat,long,distribution)
 
+        
       
-      browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
-      print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
+      # This code makes a R map
+        
+        #world<-map_data('world')
+        #sf<-data.frame(long=meanLong,lat=meanLat)
+        #p <- ggplot(legend=FALSE) +
+        #  geom_polygon( data=world, aes(x=long, y=lat,group=group)) +
+        #  xlab("") + ylab("")
+        #p <- p + geom_point(data=sf,aes(long,lat),colour="green",size=4)
+        #p
       
+      # Open google maps to avg lat/long
+      
+        browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
+        print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
+        
       return(p)
     
     }
