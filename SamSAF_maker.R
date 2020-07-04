@@ -22,7 +22,7 @@ library(cowplot)
       return(dataIn)
     }
 
-    checkDataForCommonErrors <- function(dataIn){
+    checkDataForCommonErrors <- function(dataIn, showMismatches){
       
       Thedata <- dataIn
       
@@ -53,37 +53,86 @@ library(cowplot)
         print(summary(as.factor(Thedata$days)))
         print("(Top row = day lengths, bottom row = number of rows)")
       }
-        
       
-      # are there multiple trapIDs at same GPS point?
-
-      if("trap_ID" %in% colnames(Thedata)){
+    # Check for mismatched data (e.g. things that should be 1:1 like lat to long)
         
-        uniquePairsBetweenIDandLat <- unique(Thedata[,c('GPS_latitude','trap_ID')])  # Finds all the combinations between lat and trap_IDs
-        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLat$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLat$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
-        problemLats <- subset(countSiteIDsPerLat, x > 1 ) # leave only one with more then one lat per trapID
+      mismatchCheck("collection_end_date","collection_start_date",Thedata,showMismatches)
+      mismatchCheck("collection_start_date","collection_end_date",Thedata,showMismatches)
       
-        if(nrow(problemLats) > 0){
-          print("ERROR: There are multiple site_IDs sharing the same GPS_latitudes (note if trap_ids are NOT stable year to year, this could be ok. Run checkDataForCommonErrors() after subseting by year ")
-          print(merge(uniquePairsBetweenIDandLat,problemLats)) # determinethe duplicate pairs and print to screen
-        }
-      } 
-    
-      # are there multiple locations_descriptons at same GPS point?
+      mismatchCheck("GPS_latitude","GPS_longitude",Thedata,showMismatches)
+      mismatchCheck("GPS_longitude","GPS_latitude",Thedata,showMismatches)
+      
+      mismatchCheck("GPS_latitude","trap_duration",Thedata,showMismatches)
+      mismatchCheck("GPS_longitude","trap_duration",Thedata,showMismatches)
       
       if("location_description" %in% colnames(Thedata)){
+        mismatchCheck("GPS_latitude","location_description",Thedata,showMismatches)
+        mismatchCheck("GPS_longitude","location_description",Thedata,showMismatches)
+        mismatchCheck("location_description","GPS_latitude",Thedata,showMismatches)
+        mismatchCheck("location_description","GPS_longitude",Thedata,showMismatches)
+      }
+      
+      if("trap_ID" %in% colnames(Thedata)){
+        print("trap_ID")
+        mismatchCheck("GPS_latitude","trap_ID",Thedata,showMismatches)
+        mismatchCheck("GPS_longitude","trap_ID",Thedata,showMismatches)
+      }
+      
+      if("sample_comment" %in% colnames(Thedata)){
+        print("sample_comment")
+        mismatchCheck("GPS_latitude","sample_comment",Thedata,showMismatches)
+        mismatchCheck("GPS_longitude","sample_comment",Thedata,showMismatches)
+      }
+      
+      if("species_comment" %in% colnames(Thedata)){
+        print("species_comment")
+        mismatchCheck("GPS_latitude","species_comment",Thedata,showMismatches)
+        mismatchCheck("GPS_longitude","species_comment",Thedata,showMismatches)
+      }
+      
+  }
+    
+     mismatchCheck <- function(f1,f2,Thedata,showMismatches) {
+       
+      # This function takes 2 fields f1 and f2 that should be 1:1 relationship, eg. latitude to location_description and makes sure this is the case
+      
+      field1 <- f1
+      field2 <- f2
+      
+
+      
+      uniquePairsBetweenField1andField2 <- unique(Thedata[,c(field1,field2)])  # Finds all the combinations between Field1 and Field2
+      
+      # Aggregates by field1 (they should all be 1 if no problems). Note the undrescore after group_by is so that can pass variable names
+      countSiteIDsPerField2 <- 
+        uniquePairsBetweenField1andField2 %>% 
+        group_by_(field1,field2) %>% 
+        summarise(n = n())
+      
+      countSiteIDsPerField2 <- 
+        uniquePairsBetweenField1andField2 %>% 
+        group_by_(field1) %>% 
+        summarise(n = n())
+      
+      problemField1s <- subset(countSiteIDsPerField2, n > 1 ) # leave only one with more then one lat per trapID
+      
+      
+      field2.phrase <- paste("#",field2,"'s")
+      problemField1s <- rename(problemField1s, !!field2.phrase := "n")
+      
+      
+      if(nrow(problemField1s) > 0){
+        print("")
+        print(paste("WARNING: There are multiple) ", field1,"s sharing the same ", field2,". (note if trap_ids are NOT stable year to year, this could be ok. Run checkDataForCommonErrors() after subseting by year", sep=""))
+        print(problemField1s)
         
-        uniquePairsBetweenIDandLat <- unique(Thedata[,c('GPS_latitude','location_description')])  # Finds all the combinations between lat and location descri[tionss
-        countSiteIDsPerLat <- aggregate(uniquePairsBetweenIDandLat$GPS_latitude, list(GPS_latitude = uniquePairsBetweenIDandLat$GPS_latitude), NROW) # Aggregates by lats (there all should be 1 if no problems)
-        problemLats <- subset(countSiteIDsPerLat, x > 1 ) # leave only one with more then one lat per trapID
-        
-        if(nrow(problemLats) > 0){
-          print("WARNING: There are multiple location_description sharing the same GPS_latitudes")
-          print(merge(uniquePairsBetweenIDandLat,problemLats)) # determinethe duplicate pairs and print to screen
+        if(showMismatches){
+          print("")
+          print(merge(uniquePairsBetweenField1andField2,problemField1s)) # determine the duplicate pairs and print to screen
         }
       }
-    }  
-
+    }
+    
     fixCommonFieldNameIssues <- function(dataIn) {
       #
       # Fix common field name issues 
@@ -114,7 +163,7 @@ library(cowplot)
       
       if("species" %in% colnames(dataIn)){
         if("species_name_out" %in% colnames(dataIn)){
-          print("Warning: 'species' and 'species_name_out' are both columns in the inport file")
+          print("Warning: 'species' and 'species_name_out' are both columns in the import file")
         }
       }
       
