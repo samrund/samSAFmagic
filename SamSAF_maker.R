@@ -73,22 +73,43 @@ library(cowplot)
       }
       
       if("trap_ID" %in% colnames(Thedata)){
-        print("trap_ID")
         mismatchCheck("GPS_latitude","trap_ID",Thedata,showMismatches)
         mismatchCheck("GPS_longitude","trap_ID",Thedata,showMismatches)
       }
       
       if("sample_comment" %in% colnames(Thedata)){
-        print("sample_comment")
         mismatchCheck("GPS_latitude","sample_comment",Thedata,showMismatches)
         mismatchCheck("GPS_longitude","sample_comment",Thedata,showMismatches)
       }
       
-      if("species_comment" %in% colnames(Thedata)){
-        print("species_comment")
-        mismatchCheck("GPS_latitude","species_comment",Thedata,showMismatches)
-        mismatchCheck("GPS_longitude","species_comment",Thedata,showMismatches)
-      }
+      
+      #Look for duplicate data, such as two traps at same GPS point
+         
+       ThedataIn.2 <- subset(Thedata, species != "BLANK")
+      
+       ThedataIn.2$smash <- paste(ThedataIn.2$collection_end_date,
+                                 ThedataIn.2$GPS_latitude,
+                                 ThedataIn.2$GPS_longitude,
+                                 ThedataIn.2$species, 
+                                 ThedataIn.2$trap_type,
+                                 ThedataIn.2$attractant,sep='_') 
+    
+        counts <- 
+          ThedataIn.2 %>% 
+          group_by(smash) %>% 
+          summarise(n = n())
+        
+        errorsOut <- subset(counts, n > 1)
+        
+        if(nrow(errorsOut) > 0){
+          print("WARNING: There are rows that have identical collection end date X GPS X species X trap type X attractant")
+          print("This kind of isssue can exisit if two traps were co-located for example")
+          print(errorsOut)
+          
+            if(showMismatches){
+              
+            }
+        }
       
   }
     
