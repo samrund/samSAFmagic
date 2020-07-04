@@ -422,12 +422,16 @@ library(cowplot)
         mydata.config <- rbind(mydata.config,c("  adult : IDOMAL:0000655")) 
       }
       
-      if("larva" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000653")) 
+      if("vector organism" %in% mydata$developmental_stage){
+        mydata.config <- rbind(mydata.config,c("  vector organism : IDOMAL:0000644")) 
       }
       
       if("pupa" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000654")) 
+        mydata.config <- rbind(mydata.config,c("  pupa : IDOMAL:0000654")) 
+      }
+      
+      if("larva" %in% mydata$developmental_stage){
+        mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000653")) 
       }
       
       # Sex 
