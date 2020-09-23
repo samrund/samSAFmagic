@@ -104,6 +104,7 @@ library(cowplot)
         if(nrow(errorsOut) > 0){
           print("WARNING: There are rows that have identical collection end date X GPS X species X trap type X attractant")
           print("This kind of isssue can exisit if two traps were co-located for example")
+          print("This may also indicate that a row of a wide orginial dataset had the wrong location entered, thus causing a duplication. This would likely result in no errors being thrown above for multiple traps at  same lat or long")
           print(errorsOut)
           
             if(showMismatches){
@@ -555,7 +556,7 @@ library(cowplot)
       }
       
       if("ABC TRAP" %in% mydata$trap_type) { 
-        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : ABC Trap"))
+        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : ABC TRAP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : ABC trap catch"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : IRO"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : 0000027"))
