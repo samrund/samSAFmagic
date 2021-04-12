@@ -651,13 +651,13 @@ library(cowplot)
       knownAttractants <- c("bg-lure",
                             "light", 
                             "co2", 
-                            "bg-lure;co2", 
-                            "light;co2",
                             "none",
                             "human",
                             "cow", 
                             "hay or grass infusion",
-                            "alfalfa infusion")
+                            "alfalfa infusion",
+                            "chicken",
+                            "uv light")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
 
@@ -725,6 +725,15 @@ library(cowplot)
       if("bg-lure" %in% dataIn$attractant){
         mydata.config <- rbind(mydata.config, c("  bg-lure : IRO:0001060")) 
       }
+        
+      if("chicken" %in% dataIn$attractant){
+          mydata.config <- rbind(mydata.config, c("  chicken : IRO:0000158")) 
+          
+      }
+        
+      if("uv light" %in% dataIn$attractant){
+          mydata.config <- rbind(mydata.config, c("  uv light : IRO:0000193")) 
+      }       
       
       # Clean up config file
       
