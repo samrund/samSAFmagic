@@ -92,7 +92,9 @@ library(cowplot)
                                  ThedataIn.2$GPS_longitude,
                                  ThedataIn.2$species, 
                                  ThedataIn.2$trap_type,
-                                 ThedataIn.2$attractant,sep='_') 
+                                 ThedataIn.2$attractant,
+                                 ThedataIn.2$sex,
+                                 sep='_') 
     
         counts <- 
           ThedataIn.2 %>% 
@@ -102,7 +104,7 @@ library(cowplot)
         errorsOut <- subset(counts, n > 1)
         
         if(nrow(errorsOut) > 0){
-          print("WARNING: There are rows that have identical collection end date X GPS X species X trap type X attractant")
+          print("WARNING: There are rows that have identical collection end date X GPS X species X trap type X attractant X sex")
           print("This kind of isssue can exisit if two traps were co-located for example")
           print("This may also indicate that a row of a wide orginial dataset had the wrong location entered, thus causing a duplication. This would likely result in no errors being thrown above for multiple traps at  same lat or long")
           print(errorsOut)
@@ -145,7 +147,7 @@ library(cowplot)
       
       if(nrow(problemField1s) > 0){
         print("")
-        print(paste("WARNING: There are multiple) ", field1,"s sharing the same ", field2,". (note if trap_ids are NOT stable year to year, this could be ok. Run checkDataForCommonErrors() after subseting by year", sep=""))
+        print(paste("WARNING: There are  ", field1,"s sharing/have multiple  ", field2,". (note if trap_ids are NOT stable year to year, this could be ok. Run checkDataForCommonErrors() after subseting by year", sep=""))
         print(problemField1s)
         
         if(showMismatches){
@@ -333,7 +335,7 @@ library(cowplot)
         
         if(NROW(dataIn.2) > 0){
           print("+++++ WARNING! +++++")
-          print("There are collection(s) [same collection_start_date, GPS_latitude,GPS_longitude,trap_type] with different collection_end_date")
+          print("There are mupltiple end dates for same collection ")
           print(dataIn.2)
 
         }
@@ -365,6 +367,9 @@ library(cowplot)
 
       dataIn$attractant[dataIn$attractant=="alfalfa"] <- "alfalfa infusion"
       
+      dataIn$attractant[dataIn$attractant=="hay"] <- "hay or grass infusion"
+      dataIn$attractant[dataIn$attractant=="grass"] <- "hay or grass infusion"
+      
       dataIn$attractant[dataIn$attractant=="bg-lure; co2"] <- "bg-lure;co2"
       dataIn$attractant[dataIn$attractant=="co2; bg-lure"] <- "bg-lure;co2"
       dataIn$attractant[dataIn$attractant=="co2;bg-lure"] <- "bg-lure;co2"
@@ -379,6 +384,7 @@ library(cowplot)
       dataIn$developmental_stage[dataIn$developmental_stage=="adults"] <- "adult"
       dataIn$developmental_stage[dataIn$developmental_stage=="larvae"] <- "larva"
       dataIn$developmental_stage[dataIn$developmental_stage=="pupae"] <- "pupa"
+      dataIn$developmental_stage[dataIn$developmental_stage=="eggs"] <- "egg"
       
       return(dataIn)
     }
@@ -433,6 +439,10 @@ library(cowplot)
       
       if("larva" %in% mydata$developmental_stage){
         mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000653")) 
+      }
+      
+      if("egg" %in% mydata$developmental_stage){
+        mydata.config <- rbind(mydata.config,c("  egg : IDOMAL:XXXXXXXX")) 
       }
       
       # Sex 
@@ -638,14 +648,47 @@ library(cowplot)
       
       # attractants
       
-      knownAttractants <- c("bg-lure","light", "co2", "bg-lure;co2", "light;co2","none","human","cow", "hay or grass infusion","alfalfa infusion")
+      knownAttractants <- c("bg-lure",
+                            "light", 
+                            "co2", 
+                            "bg-lure;co2", 
+                            "light;co2",
+                            "none",
+                            "human",
+                            "cow", 
+                            "hay or grass infusion",
+                            "alfalfa infusion")
       
-      attractantsinStudy <- unique(dataIn$attractant)
-    
+      attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
+
+      
+      #If there is multi-attractant fields (e.g. thing1;thing2;thing3) make seperate rows in config file
+      
+        attractantsinStudy.2 <-vector() # an empty vector 
+  
+        
+        for(y in 1:2){  
+          for(i in 1:length(attractantsinStudy)){
+            if(grepl(";",attractantsinStudy[i])){
+              attractantsinStudy.2 <-  c(attractantsinStudy.2, unlist(strsplit(attractantsinStudy[i], ";")))
+            }
+            else{
+              attractantsinStudy.2 <-  append(attractantsinStudy.2, attractantsinStudy[i])
+            }
+          }
+        }
+        
+        attractantsinStudy  <- unique(attractantsinStudy.2)
+        
+        
+   #Config text for attractants
+        
       for(i in 1:length(attractantsinStudy)){
         if(attractantsinStudy [i] %in% knownAttractants){
         } else{
           print(paste("Attractant not handled:",attractantsinStudy [i], "- ontology number will need to be manually added to config file"))
+          print("Handled attractants are:")
+          print(knownAttractants) # Prints list of known attractants from list above
           
           mydata.config <- rbind(mydata.config, c(paste("  ",attractantsinStudy [i]," :",sep="")))  #adds line to config file (without id number)
         }
@@ -659,21 +702,11 @@ library(cowplot)
         mydata.config <- rbind(mydata.config, c("  co2 : IRO:0000035")) 
       }
       
-      if("light;co2" %in% dataIn$attractant){
-        mydata.config <- rbind(mydata.config, c("  co2 : IRO:0000035")) 
-        mydata.config <- rbind(mydata.config, c("  light : IRO:0000139")) 
-      }
-      
-      if("bg-lure;co2" %in% dataIn$attractant){
-        mydata.config <- rbind(mydata.config, c("  co2 : IRO:0000035")) 
-        mydata.config <- rbind(mydata.config, c("  bg-lure : IRO:0001060")) 
-      }
-      
       if("none" %in% dataIn$attractant){
         mydata.config <- rbind(mydata.config, c("  none : IRO:0000153")) 
       }
       
-      if("hay and grass infusion" %in% dataIn$attractant){
+      if("hay or grass infusion" %in% dataIn$attractant){
         mydata.config <- rbind(mydata.config, c("  hay or grass infusion : IRO:0000037")) 
       }
 
