@@ -484,14 +484,17 @@ library(cowplot)
                       , "ABC TRAP"
                       ,"OUTDOOR HLC"
                       ,"INDOOR HLC"
-                      , "DIP")
+                      , "DIP"
+                      , "ANIMAL TRAP"
+                      , "GENERIC TRAP")
       
       trapsInStudy <- unique(dataIn$trap_type) 
       
       for(i in 1:length(trapsInStudy)){
         if(trapsInStudy[i] %in% knownTraps){
         } else{
-          print(paste("Collection Method Not Handled:",trapsInStudy[i], "- will need to be manually modified in config file"))
+          print(paste("Collection Method Not Handled:",trapsInStudy[i], "- will need to be manually modified in config file. Handled trap types:"))
+          print(knownTraps) # Prints a list of handled trap types
           
           mydata.config <- rbind(mydata.config, c(paste("  - study_protocol_name :",trapsInStudy[i])))
           mydata.config <- rbind(mydata.config, c("    study_protocol_type : XXX"))
@@ -605,6 +608,14 @@ library(cowplot)
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Larvae were collected from water using dippers")) 
       }
       
+      if("GENERIC TRAP" %in% mydata$trap_type) { 
+        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : GENERIC TRAP"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type : XXX"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : XXX"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : XXX"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_description : XXX")) 
+      }
+      
       # Identification Method
       
       if("MORPHO" %in% mydata$species_identification_method){
@@ -624,7 +635,6 @@ library(cowplot)
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : 30000040"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Collected mosquitoes were identified by PCR examination."))
       }
-      
       
       knownIDmethods <- c("MORPHO")
       
@@ -648,25 +658,28 @@ library(cowplot)
       
       # attractants
       
-      knownAttractants <- c("bg-lure",
-                            "light", 
-                            "co2", 
-                            "none",
-                            "human",
-                            "cow", 
-                            "hay or grass infusion",
-                            "alfalfa infusion",
-                            "chicken",
-                            "uv light")
+      knownAttractants <- c("bg-lure"
+                            , "light"
+                            , "co2"
+                            , "none"
+                            , "human"
+                            , "cow" 
+                            , "hay or grass infusion"
+                            , "alfalfa infusion"
+                            , "chicken"
+                            , "uv light"
+                            , "yeast"
+                            , "octenol"
+                            , "organic infusion"
+                            , "attractive substance")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
 
       
-      #If there is multi-attractant fields (e.g. thing1;thing2;thing3) make seperate rows in config file
+      #If there is multi-attractant fields (e.g. thing1;thing2;thing3) make seperate rows in config file. It can handle up to 3 attractants since it cycles through the list 2x
       
         attractantsinStudy.2 <-vector() # an empty vector 
   
-        
         for(y in 1:2){  
           for(i in 1:length(attractantsinStudy)){
             if(grepl(";",attractantsinStudy[i])){
@@ -679,7 +692,6 @@ library(cowplot)
         }
         
         attractantsinStudy  <- unique(attractantsinStudy.2)
-        
         
    #Config text for attractants
         
@@ -734,6 +746,22 @@ library(cowplot)
       if("uv light" %in% dataIn$attractant){
           mydata.config <- rbind(mydata.config, c("  uv light : IRO:0000193")) 
       }       
+        
+      if("yeast" %in% dataIn$attractant){
+          mydata.config <- rbind(mydata.config, c("  yeast : IRO:0000159")) 
+      }   
+        
+      if("octenol" %in% dataIn$attractant){
+          mydata.config <- rbind(mydata.config, c("  octenol : IRO:0000036")) 
+      } 
+        
+      if("organic infusion" %in% dataIn$attractant){
+          mydata.config <- rbind(mydata.config, c("  organic infusion : IRO:0001058")) 
+      } 
+        
+      if("attractive substance" %in% dataIn$attractant){
+        mydata.config <- rbind(mydata.config, c("  attractive substance : IRO0000034")) 
+      }   
       
       # Clean up config file
       
