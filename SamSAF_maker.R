@@ -353,30 +353,23 @@ library(cowplot)
       
       dataIn$trap_type <-toupper(dataIn$trap_type)
       
+      #ensure multi-attractants have no commas
+      
+      dataIn$attractant <- gsub(",", ";", dataIn$attractant)
+      
+      #ensure multi-attractants have no leading white spaces
+      
+      dataIn$attractant <- gsub("; ", ";", dataIn$attractant)
+      
       #rename some protocols to standarize them
       
       dataIn$species_identification_method[dataIn$species_identification_method=="morphological"] <- "MORPHO"
       dataIn$species_identification_method[dataIn$species_identification_method=="morpho"] <- "MORPHO"
-      dataIn$attractant[dataIn$attractant=="light; co2"] <- "light;co2"
-      dataIn$attractant[dataIn$attractant=="co2; light"] <- "light;co2"
-      dataIn$attractant[dataIn$attractant=="co2;light"] <- "light;co2"
-      
-      dataIn$attractant[dataIn$attractant=="light, co2"] <- "light;co2"
-      dataIn$attractant[dataIn$attractant=="co2, light"] <- "light;co2"
-      dataIn$attractant[dataIn$attractant=="co2,light"] <- "light;co2"
 
       dataIn$attractant[dataIn$attractant=="alfalfa"] <- "alfalfa infusion"
       
       dataIn$attractant[dataIn$attractant=="hay"] <- "hay or grass infusion"
       dataIn$attractant[dataIn$attractant=="grass"] <- "hay or grass infusion"
-      
-      dataIn$attractant[dataIn$attractant=="bg-lure; co2"] <- "bg-lure;co2"
-      dataIn$attractant[dataIn$attractant=="co2; bg-lure"] <- "bg-lure;co2"
-      dataIn$attractant[dataIn$attractant=="co2;bg-lure"] <- "bg-lure;co2"
-      
-      dataIn$attractant[dataIn$attractant=="bg-lure, co2"] <- "bg-lure;co2"
-      dataIn$attractant[dataIn$attractant=="co2, bg-lure"] <- "bg-lure;co2"
-      dataIn$attractant[dataIn$attractant=="co2,bg-lure"] <- "bg-lure;co2"
       
       #standarize developmental_stage
       
@@ -692,10 +685,12 @@ library(cowplot)
         }
         
         attractantsinStudy  <- unique(attractantsinStudy.2)
+        attractantsinStudy <- trimws(attractantsinStudy)
         
    #Config text for attractants
         
       for(i in 1:length(attractantsinStudy)){
+        print(attractantsinStudy [i]) #TempForTestng
         if(attractantsinStudy [i] %in% knownAttractants){
         } else{
           print(paste("Attractant not handled:",attractantsinStudy [i], "- ontology number will need to be manually added to config file"))
@@ -706,60 +701,59 @@ library(cowplot)
         }
       }
       
-      if("light" %in% dataIn$attractant){
+      if("light" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  light : IRO:0000139")) 
       }
       
-      if("co2" %in% dataIn$dataIn$attractant){
+      if("co2" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  co2 : IRO:0000035")) 
       }
       
-      if("none" %in% dataIn$attractant){
+      if("none" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  none : IRO:0000153")) 
       }
       
-      if("hay or grass infusion" %in% dataIn$attractant){
+      if("hay or grass infusion" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  hay or grass infusion : IRO:0000037")) 
       }
 
-      if("human" %in% dataIn$attractant){
+      if("human" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  human : VBsp:0001357")) 
       }
       
-      if("cow" %in% dataIn$attractant){
+      if("cow" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  cow : IRO:XXX")) 
       }
       
-      if("alfalfa infusion" %in% dataIn$attractant){
+      if("alfalfa infusion" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  alfalfa infusion: IRO:0001059")) 
       }
       
-      if("bg-lure" %in% dataIn$attractant){
+      if("bg-lure" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  bg-lure : IRO:0001060")) 
       }
         
-      if("chicken" %in% dataIn$attractant){
+      if("chicken" %in% attractantsinStudy){
           mydata.config <- rbind(mydata.config, c("  chicken : IRO:0000158")) 
-          
       }
         
-      if("uv light" %in% dataIn$attractant){
+      if("uv light" %in% attractantsinStudy){
           mydata.config <- rbind(mydata.config, c("  uv light : IRO:0000193")) 
       }       
         
-      if("yeast" %in% dataIn$attractant){
+      if("yeast" %in% attractantsinStudy){
           mydata.config <- rbind(mydata.config, c("  yeast : IRO:0000159")) 
       }   
         
-      if("octenol" %in% dataIn$attractant){
+      if("octenol" %in% attractantsinStudy){
           mydata.config <- rbind(mydata.config, c("  octenol : IRO:0000036")) 
       } 
         
-      if("organic infusion" %in% dataIn$attractant){
+      if("organic infusion" %in% attractantsinStudy){
           mydata.config <- rbind(mydata.config, c("  organic infusion : IRO:0001058")) 
       } 
         
-      if("attractive substance" %in% dataIn$attractant){
+      if("attractive substance" %in% attractantsinStudy){
         mydata.config <- rbind(mydata.config, c("  attractive substance : IRO0000034")) 
       }   
       
