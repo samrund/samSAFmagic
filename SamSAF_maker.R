@@ -890,13 +890,15 @@ library(cowplot)
       q <- plot_grid(p,site_plot)
       
       # Open google maps to avg lat/long
+     
+       meanLong <- mean(dataIn$GPS_longitude)
+       meanLat <- mean(dataIn$GPS_latitude)
       
-      
-      if(googleMaps == TRUE){
-        browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
-        print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
-        print(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project)
-      }
+       if(googleMaps == TRUE){
+          browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
+          print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
+          print(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project)
+         }
       
       return(q)
     }
