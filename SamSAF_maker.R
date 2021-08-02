@@ -3,8 +3,6 @@ library(maps)
 library(ggplot2)
 library(cowplot)
 
-
-
     swapLatLong <- function(dataIn){
       
       
@@ -685,7 +683,6 @@ library(cowplot)
         }
         
         attractantsinStudy  <- unique(attractantsinStudy.2)
-        attractantsinStudy <- trimws(attractantsinStudy)
         
    #Config text for attractants
         
@@ -812,6 +809,10 @@ library(cowplot)
     }      
     
     plotAvgGPSpoints <- function(dataIn){        
+      #DEPRECATED
+      
+      print("WARNING: This script deprecated, use plotAvgGPSpoints2(dataIn = mydata,googleMaps = FALSE) instead")
+      
       # Plot average point on map to make sure its in right place.
       
       dataIn <- mydata
@@ -844,10 +845,63 @@ library(cowplot)
       
         browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
         print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
-        
+        print(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project)
       return(p)
-    
     }
+
+    plotAvgGPSpoints2 <- function(dataIn,googleMaps){        
+      # Plot average point on map to make sure its in right place.
+      
+      dataIn <- mydata # FOR TESTING ONLY
+      
+      wm<-map_data("world") %>% filter(region != "Antartica" ) %>% fortify()
+      
+      ## site coords
+      
+      site_points <- dataIn %>% distinct(GPS_latitude,GPS_longitude)
+      
+      # generate and plot map
+      
+      site_plot <- ggplot() + coord_fixed() +
+        geom_map(data =wm, map = wm,
+                 aes(group = group, map_id= region),
+                 fill = "darkgrey") +
+        geom_point(data = fortify(site_points), aes(GPS_longitude, GPS_latitude),
+                   colour = "blue", size = 1) +
+        theme_classic() +
+        xlim(min(dataIn$GPS_longitude) - 15, max(dataIn$GPS_longitude) + 15) + 
+        ylim(min(dataIn$GPS_latitude) - 25, max(dataIn$GPS_latitude) + 25)
+             
+      #plot(site_plot)
+    
+      ####
+      
+      # Calculate projcet mean lat & long
+      #meanLong <- mean(dataIn$GPS_longitude)
+      #meanLat <- mean(dataIn$GPS_latitude)
+      
+      # Plot histograms of lat/long
+      
+      lat <- ggplot(dataIn, aes(x=GPS_latitude)) + geom_histogram()
+      long <-ggplot(dataIn, aes(x=GPS_longitude)) + geom_histogram()
+      distribution <- ggplot(dataIn, aes(y=GPS_latitude, x=GPS_longitude))+ geom_point()
+      
+      p <- plot_grid(lat,long,distribution)
+      q <- plot_grid(p,site_plot)
+      
+      # Open google maps to avg lat/long
+      
+      
+      if(googleMaps == TRUE){
+        browseURL(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project
+        print("Your browser should have opened to the avg Lat/Long of the project. This is determined by taking the mean of all latitudes and mean of all longitudes from the entire project")
+        print(paste("https://www.google.com/maps/dir//",meanLat,",",meanLong,"/@",meanLat,",",meanLong,",7z", sep=""))  # Opens google maps to the avg lat / long of the project)
+      }
+      
+      return(q)
+    }
+    
+  
     
     PopBioWizzardHelper <- function(depositorShortNameIN,YearToExportIN){
       
