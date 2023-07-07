@@ -627,7 +627,8 @@ library(cowplot)
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Collected mosquitoes were identified by PCR examination."))
       }
       
-      knownIDmethods <- c("MORPHO")
+      knownIDmethods <- c("MORPHO",
+                          "PCR")
       
       IDmethodsInStudy <- unique(dataIn$species_identification_method)
       
