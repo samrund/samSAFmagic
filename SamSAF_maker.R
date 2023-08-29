@@ -936,3 +936,46 @@ library(cowplot)
     
 
     
+
+
+
+
+
+
+
+
+
+
+
+removeDuplicateRows <- function(df) { # Removes duplicate samples without discarding entire collections
+  throwItOut <- subset(df %>% count(GPS_latitude, GPS_longitude, collection_start_date, species, sex), n == 1)
+  throwItOut$n <- NULL
+  percent <- paste(c(as.character(ceiling(100 * (nrow(df)-nrow(throwItOut)) / nrow(df))), "%"), collapse = "")
+  if (percent == "0%") {
+    cat("No duplicate rows were detected, so no data was removed!  (:\n")
+  } else {
+    cat(paste("You have successfully removed", percent, "of your data.\n"))
+  }
+  return(
+    inner_join(throwItOut, df, by = c("GPS_latitude", "GPS_longitude", "collection_start_date", "species", "sex"))
+  )
+}
+
+removeDuplicates <- function(df) { # Removes collections that have duplicate samples
+  whenInDoubt <- subset(df %>% count(GPS_latitude, GPS_longitude, collection_start_date, species, sex), n != 1)
+  whenInDoubt$temporaryCollectionID <- paste(whenInDoubt$GPS_latitude, whenInDoubt$GPS_longitude, whenInDoubt$collection_start_date)
+  x <- df
+  x$temporaryCollectionID <- paste(x$GPS_latitude, x$GPS_longitude, x$collection_start_date)
+  throwItOut <- subset(x, !(temporaryCollectionID %in% whenInDoubt$temporaryCollectionID))
+  percent <- paste(c(as.character(ceiling(100 * (nrow(df)-nrow(throwItOut)) / nrow(df))), "%"), collapse = "")
+  if (percent == "0%") {
+    cat("No collections contained duplicate rows, so no data was removed!  (:\n")
+  } else {
+    totalCollections = length(unique(x$temporaryCollectionID))
+    removedCollections = length(unique(whenInDoubt$temporaryCollectionID))
+    cat(paste("You have successfully removed", percent, "of your data.\n"))
+    cat(paste(removedCollections, "out of", totalCollections, "collections were thrown out for containing duplicates.\n"))
+  }
+  throwItOut$temporaryCollectionID <- NULL
+  return(throwItOut)
+}
