@@ -947,7 +947,7 @@ library(cowplot)
 
 
 
-removeDuplicateRows <- function(df) { # Removes duplicate samples without discarding entire collections
+removeDuplicateRows <- function(df, showPie = TRUE) { # Removes duplicate samples without discarding entire collections
   throwItOut <- subset(df %>% count(GPS_latitude, GPS_longitude, collection_start_date, species, sex), n == 1)
   throwItOut$n <- NULL
   percent <- paste(c(as.character(ceiling(100 * (nrow(df)-nrow(throwItOut)) / nrow(df))), "%"), collapse = "")
@@ -955,13 +955,21 @@ removeDuplicateRows <- function(df) { # Removes duplicate samples without discar
     cat("No duplicate rows were detected, so no data was removed!  (:\n")
   } else {
     cat(paste("You have successfully removed", percent, "of your data.\n"))
+    if (showPie) {
+      pie(
+        c(nrow(throwItOut), nrow(df) - nrow(throwItOut)),
+        c("Good Data", "Duplicates"),
+        5000, 1, TRUE, 90,
+        col = c("green", "red")
+      )
+    }
   }
   return(
     inner_join(throwItOut, df, by = c("GPS_latitude", "GPS_longitude", "collection_start_date", "species", "sex"))
   )
 }
 
-removeDuplicates <- function(df) { # Removes collections that have duplicate samples
+removeDuplicates <- function(df, showPie = TRUE) { # Removes collections that have duplicate samples
   whenInDoubt <- subset(df %>% count(GPS_latitude, GPS_longitude, collection_start_date, species, sex), n != 1)
   whenInDoubt$temporaryCollectionID <- paste(whenInDoubt$GPS_latitude, whenInDoubt$GPS_longitude, whenInDoubt$collection_start_date)
   x <- df
@@ -975,6 +983,14 @@ removeDuplicates <- function(df) { # Removes collections that have duplicate sam
     removedCollections = length(unique(whenInDoubt$temporaryCollectionID))
     cat(paste("You have successfully removed", percent, "of your data.\n"))
     cat(paste(removedCollections, "out of", totalCollections, "collections were thrown out for containing duplicates.\n"))
+    if (showPie) {
+      pie(
+        c(nrow(throwItOut), nrow(df) - nrow(throwItOut) - nrow(whenInDoubt) * mean(whenInDoubt$n), nrow(whenInDoubt) * mean(whenInDoubt$n)),
+        c("Good Data", "Collections w/ Duplicates", "Duplicates"),
+        5000, 1, TRUE, 90,
+        col = c("green", "yellow", "red")
+      )
+    }
   }
   throwItOut$temporaryCollectionID <- NULL
   return(throwItOut)
