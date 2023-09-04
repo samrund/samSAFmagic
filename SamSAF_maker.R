@@ -931,7 +931,7 @@ library(cowplot)
       }
       
     }
-    
+
 
     
 
@@ -969,7 +969,7 @@ removeDuplicateRows <- function(df, showPie = TRUE) { # Removes duplicate sample
   )
 }
 
-removeDuplicates <- function(df, showPie = TRUE) { # Removes collections that have duplicate samples
+removeDuplicates <- function(df, showPie = TRUE, showTables = TRUE, outputCSVs = TRUE) { # Removes collections that have duplicate samples
   whenInDoubt <- subset(df %>% count(GPS_latitude, GPS_longitude, collection_start_date, species, sex), n != 1)
   whenInDoubt$temporaryCollectionID <- paste(whenInDoubt$GPS_latitude, whenInDoubt$GPS_longitude, whenInDoubt$collection_start_date)
   x <- df
@@ -990,6 +990,18 @@ removeDuplicates <- function(df, showPie = TRUE) { # Removes collections that ha
         5000, 1, TRUE, 90,
         col = c("green", "yellow", "red")
       )
+    }
+    if (showTables || outputCSVs) {
+      naughtyData <<- subset(x, temporaryCollectionID %in% whenInDoubt$temporaryCollectionID)
+      naughtyData$temporaryCollectionID <<- NULL
+      x$a <- paste(x$GPS_latitude, x$GPS_longitude, x$collection_start_date, x$species, x$sex)
+      whenInDoubt$a <- paste(whenInDoubt$GPS_latitude, whenInDoubt$GPS_longitude, whenInDoubt$collection_start_date, whenInDoubt$species, whenInDoubt$sex)
+      dataWithDuplicatesFlagged <<- df
+      dataWithDuplicatesFlagged$is.duplicate <<- x$a %in% whenInDoubt$a
+      if (showTables) {
+        View(naughtyData)
+        View(dataWithDuplicatesFlagged)
+      }
     }
   }
   throwItOut$temporaryCollectionID <- NULL
