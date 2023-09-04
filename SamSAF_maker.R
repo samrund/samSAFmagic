@@ -997,10 +997,18 @@ removeDuplicates <- function(df, showPie = TRUE, showTables = TRUE, outputCSVs =
       x$a <- paste(x$GPS_latitude, x$GPS_longitude, x$collection_start_date, x$species, x$sex)
       whenInDoubt$a <- paste(whenInDoubt$GPS_latitude, whenInDoubt$GPS_longitude, whenInDoubt$collection_start_date, whenInDoubt$species, whenInDoubt$sex)
       dataWithDuplicatesFlagged <<- df
-      dataWithDuplicatesFlagged$is.duplicate <<- x$a %in% whenInDoubt$a
+      dataWithDuplicatesFlagged$is.duplicate <<- as.character(x$a %in% whenInDoubt$a)
       if (showTables) {
         View(naughtyData)
         View(dataWithDuplicatesFlagged)
+      }
+      if (outputCSVs) {
+        write.csv(naughtyData, "naughty_data.csv")
+        write.csv(dataWithDuplicatesFlagged, "duplicates_flagged.csv")
+        cat("\nThe following CSV files were successfully saved to the working directory:\n")
+        cat(" - naughty_data.csv        (The collections with duplicates)\n")
+        cat(" - duplicates_flagged.csv  (The original data, with an extra column to signify which rows are duplicates.)\n")
+        cat("If you don't want to save CSV files with this function, set the function parameter \"outputCSVs\" to FALSE.\n")
       }
     }
   }
