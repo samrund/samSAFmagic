@@ -140,7 +140,7 @@ library(cowplot)
       
       
       field2.phrase <- paste("#",field2,"'s")
-      problemField1s <- rename(problemField1s, !!field2.phrase := "n")
+      problemField1s <- dplyr::rename(problemField1s, !!field2.phrase := "n")
       
       
       if(nrow(problemField1s) > 0){
@@ -166,19 +166,19 @@ library(cowplot)
       colnames(dataIn) <- tolower(colnames(dataIn))
       
       if("gps_longitude" %in% colnames(dataIn)){
-        dataIn <- rename(dataIn,"GPS_longitude" = "gps_longitude")
+        dataIn <- dplyr::rename(dataIn,"GPS_longitude" = "gps_longitude")
       }
       
       if("gps_latitude" %in% colnames(dataIn)){
-        dataIn <- rename(dataIn,"GPS_latitude" = "gps_latitude")
+        dataIn <- dplyr::rename(dataIn,"GPS_latitude" = "gps_latitude")
       }
       
       if("gps_qualifier" %in% colnames(dataIn)){
-        dataIn <- rename(dataIn,"GPS_qualifier" = "gps_qualifier")
+        dataIn <- dplyr::rename(dataIn,"GPS_qualifier" = "gps_qualifier")
       }
       
       if("trap_id" %in% colnames(dataIn)){
-        dataIn <- rename(dataIn,"trap_ID" = "trap_id")
+        dataIn <- dplyr::rename(dataIn,"trap_ID" = "trap_id")
       }
       
       # check  'species' and 'species_name_out' are not both there
@@ -359,7 +359,7 @@ library(cowplot)
       
       dataIn$attractant <- gsub("; ", ";", dataIn$attractant)
       
-      #rename some protocols to standarize them
+      #dplyr::rename some protocols to standarize them
       
       dataIn$species_identification_method[dataIn$species_identification_method=="morphological"] <- "MORPHO"
       dataIn$species_identification_method[dataIn$species_identification_method=="morpho"] <- "MORPHO"
