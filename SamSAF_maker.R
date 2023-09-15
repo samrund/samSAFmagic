@@ -2,6 +2,7 @@ library(dplyr)
 library(maps)
 library(ggplot2)
 library(cowplot)
+library(rlang)
 
     swapLatLong <- function(dataIn){
       
@@ -97,7 +98,7 @@ library(cowplot)
         counts <- 
           ThedataIn.2 %>% 
           group_by(smash) %>% 
-          summarise(n = n())
+          dplyr::summarise(n = n())
         
         errorsOut <- subset(counts, n > 1)
         
@@ -121,20 +122,22 @@ library(cowplot)
       field1 <- f1
       field2 <- f2
       
-
-      
       uniquePairsBetweenField1andField2 <- unique(Thedata[,c(field1,field2)])  # Finds all the combinations between Field1 and Field2
       
       # Aggregates by field1 (they should all be 1 if no problems). Note the undrescore after group_by is so that can pass variable names
-      countSiteIDsPerField2 <- 
-        uniquePairsBetweenField1andField2 %>% 
-        group_by_(field1,field2) %>% 
-        summarise(n = n())
+      
+      field1 <- as.name(field1)
+      field2 <- as.name(field2)
       
       countSiteIDsPerField2 <- 
         uniquePairsBetweenField1andField2 %>% 
-        group_by_(field1) %>% 
-        summarise(n = n())
+        group_by(!!field1,!!field2) %>% 
+        dplyr::summarise(n = n())
+      
+      countSiteIDsPerField2 <- 
+        uniquePairsBetweenField1andField2 %>% 
+        group_by(!!field1) %>% 
+        dplyr::summarise(n = n())
       
       problemField1s <- subset(countSiteIDsPerField2, n > 1 ) # leave only one with more then one lat per trapID
       
