@@ -649,11 +649,11 @@ library(rlang)
       mydata.config <- rbind(mydata.config, c("",NULL)) 
       mydata.config <- rbind(mydata.config, c("study_terms :",NULL))  # add section title
       
-      mydata.config <- rbind(mydata.config,c("  pool : EFO:0000663"))
+      mydata.config <- rbind(mydata.config,c("  pool : OBI_0302716"))
       
-      # attractants
+      # attractants (and trap types, but all called "attractants for saf1 legacy reasons)
       
-      knownAttractants <- c("bg-lure"
+      knownAttractants <- c("bg-lure" #Attractants 
                             , "light"
                             , "co2"
                             , "none"
@@ -666,10 +666,13 @@ library(rlang)
                             , "yeast"
                             , "octenol"
                             , "organic infusion"
-                            , "attractive substance")
+                            , "attractive substance"
+                            , "CDCLIGHT" # Traps
+                            , "GRAVID"
+                            , "BGSENT")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
-
+      attractantsinStudy <- c(attractantsinStudy, unique(dataIn$collection_device))
       
       #If there is multi-attractant fields (e.g. thing1;thing2;thing3) make seperate rows in config file. It can handle up to 3 attractants since it cycles through the list 2x
       
@@ -703,60 +706,73 @@ library(rlang)
       }
       
       if("light" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  light : IRO:0000139")) 
+        mydata.config <- rbind(mydata.config, c("  light : XXX need saf 2.0 code ")) 
       }
       
       if("co2" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  co2 : IRO:0000035")) 
+        mydata.config <- rbind(mydata.config, c("  co2 : CHEBI_16526")) 
       }
       
       if("none" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  none : IRO:0000153")) 
+        mydata.config <- rbind(mydata.config, c("  none : XXX need saf 2.0 code")) 
       }
       
       if("hay or grass infusion" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  hay or grass infusion : IRO:0000037")) 
+        mydata.config <- rbind(mydata.config, c("  hay or grass infusion : XXX need saf 2.0 code")) 
       }
 
       if("human" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  human : VBsp:0001357")) 
+        mydata.config <- rbind(mydata.config, c("  human : XXX need saf 2.0 code")) 
       }
       
       if("cow" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  cow : IRO:XXX")) 
+        mydata.config <- rbind(mydata.config, c("  cow : XXX need saf 2.0 code")) 
       }
       
       if("alfalfa infusion" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  alfalfa infusion: IRO:0001059")) 
+        mydata.config <- rbind(mydata.config, c("  EUPATH_0043002")) 
       }
       
       if("bg-lure" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  bg-lure : IRO:0001060")) 
+        mydata.config <- rbind(mydata.config, c("  bg-lure : EUPATH_0043003")) 
       }
         
       if("chicken" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  chicken : IRO:0000158")) 
+          mydata.config <- rbind(mydata.config, c("  chicken : XXX need saf 2.0 code")) 
       }
         
       if("uv light" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  uv light : IRO:0000193")) 
+          mydata.config <- rbind(mydata.config, c("  uv light : XXX need saf 2.0 code")) 
       }       
         
       if("yeast" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  yeast : IRO:0000159")) 
+          mydata.config <- rbind(mydata.config, c("  yeast : XXX need saf 2.0 code")) 
       }   
         
       if("octenol" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  octenol : IRO:0000036")) 
+          mydata.config <- rbind(mydata.config, c("  octenol : XXX need saf 2.0 code")) 
       } 
         
       if("organic infusion" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  organic infusion : IRO:0001058")) 
+          mydata.config <- rbind(mydata.config, c("  organic infusion : XXX need saf 2.0 code")) 
       } 
         
       if("attractive substance" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  attractive substance : IRO0000034")) 
+        mydata.config <- rbind(mydata.config, c("  attractive substance : XXX need saf 2.0 code")) 
       }   
+        
+      if("CDCLIGHT" %in% attractantsinStudy){
+        mydata.config <- rbind(mydata.config, c("  CDCLIGHT : OBI_0002926")) 
+      }   
+        
+      if("GRAVID" %in% attractantsinStudy){
+        mydata.config <- rbind(mydata.config, c("  GRAVID : OBI_0002929")) 
+      }   
+        
+      if("BGSENT" %in% attractantsinStudy){
+          mydata.config <- rbind(mydata.config, c("  BGSENT : OBI_0002925")) 
+      }   
+        
       
       # Clean up config file
       
