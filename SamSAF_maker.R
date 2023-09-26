@@ -420,23 +420,23 @@ library(rlang)
       mydata.config <- rbind(mydata.config, c("study_developmental_stages :",NULL))  # add section title
       
       if("adult" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  adult : IDOMAL:0000655")) 
+        mydata.config <- rbind(mydata.config,c("  adult : UBERON_0018241")) 
       }
       
-      if("vector organism" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  vector organism : IDOMAL:0000644")) 
+      if("vector organism" %xfin% mydata$developmental_stage){
+        mydata.config <- rbind(mydata.config,c("  vector organism : XXX")) 
       }
       
       if("pupa" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  pupa : IDOMAL:0000654")) 
+        mydata.config <- rbind(mydata.config,c("  pupa : XXX")) 
       }
       
       if("larva" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  larva : IDOMAL:0000653")) 
+        mydata.config <- rbind(mydata.config,c("  larva : XXX")) 
       }
       
       if("egg" %in% mydata$developmental_stage){
-        mydata.config <- rbind(mydata.config,c("  egg : IDOMAL:XXXXXXXX")) 
+        mydata.config <- rbind(mydata.config,c("  egg : XXX")) 
       }
       
       # Sex 
