@@ -423,7 +423,7 @@ library(rlang)
         mydata.config <- rbind(mydata.config,c("  adult : UBERON_0018241")) 
       }
       
-      if("vector organism" %xfin% mydata$developmental_stage){
+      if("vector organism" %in% mydata$developmental_stage){
         mydata.config <- rbind(mydata.config,c("  vector organism : XXX")) 
       }
       
@@ -730,7 +730,7 @@ library(rlang)
       }
       
       if("alfalfa infusion" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  EUPATH_0043002")) 
+        mydata.config <- rbind(mydata.config, c("  alfalfa infusion : EUPATH_0043002")) 
       }
       
       if("bg-lure" %in% attractantsinStudy){
@@ -1058,6 +1058,7 @@ saf1_tosaf2 <- function(dataIn){
   {
     dataIn$species <- dataIn$species_name_out
     print("changing species_name_out to species, may overwrite")
+    dataIn$species_name_out <- NULL
   }
     
   if(!is.null(dataIn$vbsp_new))
@@ -1069,6 +1070,8 @@ saf1_tosaf2 <- function(dataIn){
   dataIn$collection_raw_dates <- paste(mydata$collection_start_date,"/",mydata$collection_end_date,sep = "") 
   
   dataIn$collection_device <- dataIn$collection_method
+  
+  dataIn$sample_ID[dataIn$sample_count==0] <- "" # makes sample_ID name blank for zeros (empty collections)
   
   return(dataIn)
 }
