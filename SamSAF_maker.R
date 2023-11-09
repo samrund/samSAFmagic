@@ -669,7 +669,8 @@ library(rlang)
                             , "attractive substance"
                             , "CDCLIGHT" # Traps
                             , "GRAVID"
-                            , "BGSENT")
+                            , "BGSENT"
+                            , "NJLT")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
       attractantsinStudy <- c(attractantsinStudy, unique(dataIn$collection_device))
@@ -774,7 +775,7 @@ library(rlang)
       }   
         
       if("NJLT" %in% attractantsinStudy){
-          mydata.config <- rbind(mydata.config, c("  BGSENT : OBI_0002935")) 
+          mydata.config <- rbind(mydata.config, c("  NJLT : OBI_0002935")) 
         }   
       
       # Clean up config file
