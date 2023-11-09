@@ -691,13 +691,13 @@ library(rlang)
         
         attractantsinStudy  <- unique(attractantsinStudy.2)
         
-   #Config text for attractants
+   #Config text for attractants and trap types (for SAF2.0)
         
       for(i in 1:length(attractantsinStudy)){
         print(attractantsinStudy [i]) #TempForTestng
         if(attractantsinStudy [i] %in% knownAttractants){
         } else{
-          print(paste("Attractant not handled:",attractantsinStudy [i], "- ontology number will need to be manually added to config file"))
+          print(paste("Attractant and/or trap methods not handled:",attractantsinStudy [i], "- ontology number will need to be manually added to config file"))
           print("Handled attractants are:")
           print(knownAttractants) # Prints list of known attractants from list above
           
@@ -706,7 +706,7 @@ library(rlang)
       }
       
       if("light" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  light : XXX need saf 2.0 code ")) 
+        mydata.config <- rbind(mydata.config, c("  light : OBI_0400065")) 
       }
       
       if("co2" %in% attractantsinStudy){
@@ -773,6 +773,9 @@ library(rlang)
           mydata.config <- rbind(mydata.config, c("  BGSENT : OBI_0002925")) 
       }   
         
+      if("NJLT" %in% attractantsinStudy){
+          mydata.config <- rbind(mydata.config, c("  BGSENT : OBI_0002935")) 
+        }   
       
       # Clean up config file
       
