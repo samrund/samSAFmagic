@@ -617,7 +617,7 @@ library(rlang)
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : MORPHO")) 
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : organism identification by morphological examination assay"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))  
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : 0002739"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002739"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Collected mosquitoes were identified by morphological examination."))
       }
       
@@ -626,7 +626,7 @@ library(rlang)
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : PCR")) 
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : PCR-based species identification"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))  
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : 30000040"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_30000040"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Collected mosquitoes were identified by PCR examination."))
       }
       
@@ -795,7 +795,7 @@ library(rlang)
         "study_tags :",
         "  - study_tag : abundance",
         "    study_tag_term_source_ref : VBcv",
-        "    study_tag_term_accession_number : 0001085",
+        "    study_tag_term_accession_number : VBcv_0001085",
         "",
         
         "  - study_tag : XXX",
