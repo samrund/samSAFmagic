@@ -1,3 +1,5 @@
+# EuPathDB Master File of terms: https://docs.google.com/spreadsheets/d/1vlj-4NTpKJNjj-eU-JgJr6d2OHXiGwiK14InUeNmA7c/edit#gid=1006114387
+
 library(dplyr)
 library(maps)
 library(ggplot2)
@@ -445,15 +447,15 @@ library(rlang)
       mydata.config <- rbind(mydata.config, c("study_sexes :",NULL))  # add section title
       
       if("female" %in% mydata$sex){
-        mydata.config <- rbind(mydata.config,c("  female : PATO:0000383")) 
+        mydata.config <- rbind(mydata.config,c("  female : PATO_0000383")) 
       }
       
       if("male" %in% mydata$sex){
-        mydata.config <- rbind(mydata.config,c("  male : PATO:0000384")) 
+        mydata.config <- rbind(mydata.config,c("  male : PATO_0000384")) 
       }
       
       if("mixed" %in% mydata$sex){
-        mydata.config <- rbind(mydata.config,c("  mixed : PATO:0001338")) 
+        mydata.config <- rbind(mydata.config,c("  mixed : PATO_0001338")) 
       }
       
       # Study protocols 
@@ -480,7 +482,8 @@ library(rlang)
                       ,"INDOOR HLC"
                       , "DIP"
                       , "ANIMAL TRAP"
-                      , "GENERIC TRAP")
+                      , "GENERIC TRAP"
+                      , "RESTING BOX")
       
       trapsInStudy <- unique(dataIn$collection_method) 
       
@@ -501,8 +504,8 @@ library(rlang)
       if("NJLT" %in% mydata$collection_method) {
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : NJLT"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : IRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : IRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were caught using a New Jersey light trap"))
       }
       
@@ -594,6 +597,14 @@ library(rlang)
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a human landing catch, indoors")) 
       }
       
+      if("RESTING BOX" %in% mydata$collection_method) { 
+        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : INDOOR HLC"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002940"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a human landing catch, indoors")) 
+      }
+      
       if("DIP" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : DIP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : XXXXXX not set up yet!"))
@@ -670,7 +681,8 @@ library(rlang)
                             , "CDCLIGHT" # Traps
                             , "GRAVID"
                             , "BGSENT"
-                            , "NJLT")
+                            , "NJLT"
+                            , "RESTING BOX")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
       attractantsinStudy <- c(attractantsinStudy, unique(dataIn$collection_device))
@@ -715,7 +727,7 @@ library(rlang)
       }
       
       if("none" %in% attractantsinStudy){
-        mydata.config <- rbind(mydata.config, c("  none : XXX need saf 2.0 code")) 
+        mydata.config <- rbind(mydata.config, c("  none : EUPATH_0043005")) 
       }
       
       if("hay or grass infusion" %in% attractantsinStudy){
@@ -1078,5 +1090,111 @@ saf1_tosaf2 <- function(dataIn){
   dataIn$sample_ID[dataIn$sample_count==0] <- "" # makes sample_ID name blank for zeros (empty collections)
   
   return(dataIn)
+}
+
+saf2_to_VectorByte <- function(byte){
+  
+#below are listed all the vectorbyte fields   
+  
+    title #required
+  collection_author_name
+  dataset_citation
+  publication_citation
+  description
+  url
+    contact_name #required
+  contact_affiliation
+  email
+  orchid
+  project_identifier
+  publication_status
+  dataset_license
+  data_rights
+  embargo_release_date
+   location_description #required
+  study_collection_area
+  geo_datum
+  gps_obfuscation_info
+    byte <- rename(mydata, "species_id_method" = "species_identification_method") #required
+  study_design
+  sampling_strategy
+    byte <- rename(mydata, "sampling_method"  = "collection_method") #required
+    byte <- rename(mydata, "sampling_protocol"  = "attractant")
+    byte$measurement_unit <- "individuals" #required
+  value_transform
+    byte <- rename(mydata, "sample_start_date" = "collection_start_date") #required
+    byte <- rename(mydata, "sample_end_date" = "collection_end_date") #required
+  sample_start_time
+  sample_end_time
+    byte <- rename(mydata, "sample_value"  = "sample_count") #required
+    byte <- rename(mydata, "sample_sex" = "sex") #required
+    byte <- rename(mydata, "sample_stage"  = "developmental_stage") #required
+  byte <- rename(mydata, "sample_location"  = "location_description") 
+  sample_collection_area 
+  byte <- rename(mydata, "sample_lat_dd" = "GPS_latitude") #required
+  byte <- rename(mydata, "sample_long_dd" = "GPS_longitude") #required
+  sample_environment
+  additional_location_info 
+  sample_name
+    byte$digitized_from_graph <- FALSE #required
+  date_uncertainty_due_to_graph
+  time_shift_possible
+  curatedbydoi
+  curatedbycitation
+    canonical_name # required ??
+  kingdom
+  phylum
+  class
+  order
+  family
+  genus 
+  species 
+    byte$submittedby <-"Samuel Rund" #required
+    contributoremail <- "srund@nd.edu" #required
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  #sample_value
+  #sample_unit (empty)
+  #measurement_unit
+  #value_tranform (empty)
+
+  #sample_location - we just have the gps coordinates 
+  #sample_collection_area (empty)
+  #sample_environment (empty)
+  #additional_location_info (empty) 
+  #additional_sample_info (empty)
+  #sample_name (empty) - could be sample_ID?
+  #study_design (empty)
+  #sample_strategy (empty)
+  #sampling_method - could be trap type?
+  #location_description
+  #geo_datum (empty)
+  #gps_obfuscation_info
+  #description
+  #collection_author_name - could fill in uniformly (Michelle?)
+  #dataset_citation (empty)
+  #url (empty)
+  #contact_name (empty) - could fill in uniformly (Sam?)
+  #contact_affiliation - could fill in uniformly (UND)
+  #email (empty)
+  #dataset_license (empty)
+  #digitized_from_graph - could fill in uniformly (FALSE)
+  #date_uncertainty_due_to_graph - could fill in uniformly (FALSE) or blank
+  #time_shift_possible
+  
+  return(byte)
 }
 
