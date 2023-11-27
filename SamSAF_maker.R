@@ -27,6 +27,22 @@ library(rlang)
       
       Thedata <- dataIn
       
+    # Are their missing GPS points?
+      
+      #TO DO write code to find black GPS lat AND/OR long
+      
+      Thedata.temp <- Thedata
+      Thedata.temp[Thedata.temp == ''] <- NA
+      
+      if(is.na(Thedata.temp$GPS_latitude)){
+        print("CRITICAL ERROR there are GPS points with NA or blank  values")
+      }
+      
+      if(is.na(Thedata.temp$GPS_longitude)){
+        print( "CRITICAL ERROR there are GPS points with NA or blank values")
+      }
+     
+      
     # Adjust date data type so can use data functions in R
       
       Thedata$collection_start_date <- as.Date(Thedata$collection_start_date, "%Y-%m-%d")
