@@ -27,7 +27,7 @@ library(rlang)
       
       Thedata <- dataIn
       
-    # Are their missing GPS points?
+    # Are there missing GPS points?
       
       #TO DO write code to find black GPS lat AND/OR long
       
@@ -614,11 +614,11 @@ library(rlang)
       }
       
       if("RESTING BOX" %in% mydata$collection_method) { 
-        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : INDOOR HLC"))
+        mydata.config <- rbind(mydata.config, c("  - study_protocol_name : RESTING BOX"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002940"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a human landing catch, indoors")) 
+        mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a resting box")) 
       }
       
       if("DIP" %in% mydata$collection_method) { 
@@ -1112,104 +1112,93 @@ saf2_to_VectorByte <- function(byte){
   
 #below are listed all the vectorbyte fields   
   
-    title #required
-  collection_author_name
-  dataset_citation
-  publication_citation
-  description
-  url
-    contact_name #required
-  contact_affiliation
-  email
-  orchid
-  project_identifier
-  publication_status
-  dataset_license
-  data_rights
-  embargo_release_date
-   location_description #required
-  study_collection_area
-  geo_datum
-  gps_obfuscation_info
-    byte <- rename(mydata, "species_id_method" = "species_identification_method") #required
-  study_design
-  sampling_strategy
-    byte <- rename(mydata, "sampling_method"  = "collection_method") #required
-    byte <- rename(mydata, "sampling_protocol"  = "attractant")
-    byte$measurement_unit <- "individuals" #required
-  value_transform
-    byte <- rename(mydata, "sample_start_date" = "collection_start_date") #required
-    byte <- rename(mydata, "sample_end_date" = "collection_end_date") #required
-  sample_start_time
-  sample_end_time
-    byte <- rename(mydata, "sample_value"  = "sample_count") #required
-    byte <- rename(mydata, "sample_sex" = "sex") #required
-    byte <- rename(mydata, "sample_stage"  = "developmental_stage") #required
-  byte <- rename(mydata, "sample_location"  = "location_description") 
-  sample_collection_area 
-  byte <- rename(mydata, "sample_lat_dd" = "GPS_latitude") #required
-  byte <- rename(mydata, "sample_long_dd" = "GPS_longitude") #required
-  sample_environment
-  additional_location_info 
-  sample_name
-    byte$digitized_from_graph <- FALSE #required
-  date_uncertainty_due_to_graph
-  time_shift_possible
-  curatedbydoi
-  curatedbycitation
-    canonical_name # required ??
-  kingdom
-  phylum
-  class
-  order
-  family
-  genus 
-  species 
-    byte$submittedby <-"Samuel Rund" #required
-    contributoremail <- "srund@nd.edu" #required
-
+    byte$title <- "REQUIRED" #required
+  # collection_author_name
+  # dataset_citation
+  # description
+  # url
+     byte$contact_name <- "REQUIRED" #required
+  # contact_affiliation
+  # email
+  # project_identifier
+  # publication_status
+  # dataset_license
+  # data_rights
+  # embargo_release_date
+     byte$location_description <- "REQUIRED" #required
+  # study_collection_area
+  # geo_datum
+  # gps_obfuscation_info
+     byte <- rename(byte, "species_id_method" = "species_identification_method") #required
+  # study_design
+      byte$study_design <- paste(byte$trap_locations, "trap locations,", byte$developmental_stage, "stage collected", byte$trap_duration, "day collection")
+      byte$trap_locations <- NULL
+      byte$developmental_stage <- NULL
+      byte$trap_duration <- NULL
+  # sampling_strategy
+     byte <- rename(byte, "sampling_method"  = "collection_method") #required
+     byte <- rename(byte, "sampling_protocol"  = "attractant")
+     byte$measurement_unit <- "individuals" #required
+  # value_transform
+     byte <- rename(byte, "sample_start_date" = "collection_start_date") #required
+     byte <- rename(byte, "sample_end_date" = "collection_end_date") #required
+  # sample_start_time
+  # sample_end_time
+     byte <- rename(byte, "sample_value"  = "sample_count") #required
+     byte <- rename(byte, "sample_sex" = "sex") #required
+     byte <- rename(byte, "sample_stage"  = "developmental_stage") #required
+     byte <- rename(byte, "sample_location"  = "location_description") 
+  # sample_collection_area 
+     byte <- rename(byte, "sample_lat_dd" = "GPS_latitude") #required
+     byte <- rename(byte, "sample_long_dd" = "GPS_longitude") #required
+  # sample_environment
+  # additional_location_info 
+  # sample_name
+     byte$digitized_from_graph <- FALSE #required
+  # date_uncertainty_due_to_graph
+  # time_shift_possible
+  # curatedbydoi
+     byte$curatedbycitation <- "Often Required, eg. VectorBase"
+     byte <- rename(byte, "canonical_name" = "species") #required 
+  # kingdom
+  # phylum
+  # class
+  # order
+  # family
+  # genus 
+  # species 
+     byte$submittedby <-"Samuel Rund" #required
+     byte$contributoremail <- "srund@nd.edu" #required
   
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  #sample_value
-  #sample_unit (empty)
-  #measurement_unit
-  #value_tranform (empty)
-
-  #sample_location - we just have the gps coordinates 
-  #sample_collection_area (empty)
-  #sample_environment (empty)
-  #additional_location_info (empty) 
-  #additional_sample_info (empty)
-  #sample_name (empty) - could be sample_ID?
-  #study_design (empty)
-  #sample_strategy (empty)
-  #sampling_method - could be trap type?
-  #location_description
-  #geo_datum (empty)
-  #gps_obfuscation_info
-  #description
-  #collection_author_name - could fill in uniformly (Michelle?)
-  #dataset_citation (empty)
-  #url (empty)
-  #contact_name (empty) - could fill in uniformly (Sam?)
-  #contact_affiliation - could fill in uniformly (UND)
-  #email (empty)
-  #dataset_license (empty)
-  #digitized_from_graph - could fill in uniformly (FALSE)
-  #date_uncertainty_due_to_graph - could fill in uniformly (FALSE) or blank
-  #time_shift_possible
+     #========
+     
+     # sample_value
+  # sample_unit (empty)
+  # measurement_unit
+  # value_transform (empty)
+  # sample_location - we just have the gps coordinates 
+  # sample_collection_area (empty)
+  # sample_environment (empty)
+  # additional_location_info (empty) 
+  # additional_sample_info (empty)
+  # sample_name (empty) - could be sample_ID?
+  # study_design (empty)
+  # sample_strategy (empty)
+  # sampling_method - could be trap type?
+  # location_description
+  # geo_datum (empty)
+  # gps_obfuscation_info
+  # description
+  # collection_author_name - could fill in uniformly (Michelle?)
+  # dataset_citation (empty)
+  # url (empty)
+  # contact_name (empty) - could fill in uniformly (Sam?)
+  # contact_affiliation - could fill in uniformly (UND)
+  # email (empty)
+  # dataset_license (empty)
+  # digitized_from_graph - could fill in uniformly (FALSE)
+  # date_uncertainty_due_to_graph - could fill in uniformly (FALSE) or blank
+  # time_shift_possible
   
   return(byte)
 }
