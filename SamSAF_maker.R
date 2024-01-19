@@ -511,8 +511,8 @@ library(rlang)
           
           mydata.config <- rbind(mydata.config, c(paste("  - study_protocol_name :",trapsInStudy[i])))
           mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-          mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : XXX"))
-          mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : XXX"))
+          mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+          mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
           mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were caught using XXX"))
         }
       }
@@ -544,72 +544,72 @@ library(rlang)
       if("BGSENT" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : BGSENT"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection processp"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : VSMO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : VSMO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were caught using a Biogents BG-Sentinel trap")) 
       }
       
       if("INDOOR LIGHT TRAP" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : INDOOR LIGHT TRAP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were caught using an indoor light trap")) 
       }
       
       if("OUTDOOR LIGHT TRAP" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : OUTDOOR LIGHT TRAP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were caught using an outdoor light trap")) 
       }
       
       if("PSC" %in% mydata$collection_methode) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : PSC"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected following application of pyrethrum to the inside of a dwelling")) 
       }
       
       if("PIT TRAP" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : PIT TRAP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : IRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : IRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Resting mosquitoes were collected from pit shelters")) 
       }
       
       if("ABC TRAP" %in% mydata$tcollection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : ABC TRAP"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : IRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : IRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using an American Biophysics Corporation (ABC) light trap")) 
       }
       
       if("OUTDOOR HLC" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : OUTDOOR HLC"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a human landing catch, outdoors")) 
       }
       
       if("EVS" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : EVS"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : IRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : IRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using an EVS trap")) 
       }
         
       if("INDOOR HLC" %in% mydata$collection_method) { 
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : INDOOR HLC"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : MIRO"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : MIRO_0002904"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a human landing catch, indoors")) 
       }
       
@@ -1159,14 +1159,13 @@ saf2_to_VectorByte <- function(byte){
   # time_shift_possible
   # curatedbydoi
      byte$curatedbycitation <- "Often Required, eg. VectorBase"
-     byte <- rename(byte, "canonical_name" = "species") #required 
   # kingdom
   # phylum
   # class
   # order
   # family
   # genus 
-  # species 
+  # species #required
      byte$submittedby <-"Samuel Rund" #required
      byte$contributoremail <- "srund@nd.edu" #required
   
