@@ -29,16 +29,16 @@ library(rlang)
       
     # Are there missing GPS points?
       
-      #TO DO write code to find black GPS lat AND/OR long
+      # Find blank/ 'NA' GPS lat AND/OR long
       
       Thedata.temp <- Thedata
       Thedata.temp[Thedata.temp == ''] <- NA
       
-      if(is.na(Thedata.temp$GPS_latitude)){
-        print("CRITICAL ERROR there are GPS points with NA or blank  values")
+      if(sum(is.na(Thedata.temp$GPS_latitude))>0){
+        print("CRITICAL ERROR there are GPS points with NA or blank values")
       }
       
-      if(is.na(Thedata.temp$GPS_longitude)){
+      if(sum(is.na(Thedata.temp$GPS_longitude))>0){
         print( "CRITICAL ERROR there are GPS points with NA or blank values")
       }
      
