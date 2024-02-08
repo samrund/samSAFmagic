@@ -1108,16 +1108,17 @@ saf1_tosaf2 <- function(dataIn){
   return(dataIn)
 }
 
+
 saf2_to_VectorByte <- function(byte){
   
-#below are listed all the vectorbyte fields   
+  #below are listed all the vectorbyte fields   
   
-    byte$title <- "REQUIRED" #required
+  byte$title <- "REQUIRED" #required
   # collection_author_name
   # dataset_citation
   # description
   # url
-     byte$contact_name <- "REQUIRED" #required
+  byte$contact_name <- "REQUIRED" #required
   # contact_affiliation
   # email
   # project_identifier
@@ -1125,40 +1126,40 @@ saf2_to_VectorByte <- function(byte){
   # dataset_license
   # data_rights
   # embargo_release_date
-     byte$location_description <- "REQUIRED" #required
+  byte$location_description <- "REQUIRED" #required
   # study_collection_area
   # geo_datum
   # gps_obfuscation_info
-     byte <- rename(byte, "species_id_method" = "species_identification_method") #required
+  byte <- rename(byte, "species_id_method" = "species_identification_method") #required
   # study_design
-      byte$study_design <- paste(byte$trap_locations, "trap locations,", byte$developmental_stage, "stage collected", byte$trap_duration, "day collection")
-      byte$trap_locations <- NULL
-      byte$developmental_stage <- NULL
-      byte$trap_duration <- NULL
   # sampling_strategy
-     byte <- rename(byte, "sampling_method"  = "collection_method") #required
-     byte <- rename(byte, "sampling_protocol"  = "attractant")
-     byte$measurement_unit <- "individuals" #required
+  byte <- rename(byte, "sampling_method"  = "collection_method") #required
+  byte$sampling_method <- paste(byte$sampling_method,byte$attractant)
+  #attractant - not in VByte
+  byte$measurement_unit <- "individuals per trap per day" #required
   # value_transform
-     byte <- rename(byte, "sample_start_date" = "collection_start_date") #required
-     byte <- rename(byte, "sample_end_date" = "collection_end_date") #required
+  byte <- rename(byte, "sample_start_date" = "collection_start_date") #required
+  byte <- rename(byte, "sample_end_date" = "collection_end_date") #required
   # sample_start_time
   # sample_end_time
-     byte <- rename(byte, "sample_value"  = "sample_count") #required
-     byte <- rename(byte, "sample_sex" = "sex") #required
-     byte <- rename(byte, "sample_stage"  = "developmental_stage") #required
-     byte <- rename(byte, "sample_location"  = "location_description") 
+  byte <- rename(byte, "sample_value"  = "sample_count") #required
+  byte$sample_value <- byte$sample_value / byte$trap_number / byte$trap_duration
+  byte$trap_numbers <- NULL
+  byte$trap_duration <- NULL
+  byte <- rename(byte, "sample_sex" = "sex") #required
+  byte <- rename(byte, "sample_stage"  = "developmental_stage") #required
+  byte <- rename(byte, "sample_location"  = "location_description") 
   # sample_collection_area 
-     byte <- rename(byte, "sample_lat_dd" = "GPS_latitude") #required
-     byte <- rename(byte, "sample_long_dd" = "GPS_longitude") #required
+  byte <- rename(byte, "sample_lat_dd" = "GPS_latitude") #required
+  byte <- rename(byte, "sample_long_dd" = "GPS_longitude") #required
   # sample_environment
   # additional_location_info 
   # sample_name
-     byte$digitized_from_graph <- FALSE #required
+  byte$digitized_from_graph <- FALSE #required
   # date_uncertainty_due_to_graph
   # time_shift_possible
   # curatedbydoi
-     byte$curatedbycitation <- "Often Required, eg. VectorBase"
+  byte$curatedbycitation <- "Often Required, eg. VectorBase"
   # kingdom
   # phylum
   # class
@@ -1166,12 +1167,16 @@ saf2_to_VectorByte <- function(byte){
   # family
   # genus 
   # species #required
-     byte$submittedby <-"Samuel Rund" #required
-     byte$contributoremail <- "srund@nd.edu" #required
+  byte$submittedby <-"Samuel Rund" #required
+  byte$contributoremail <- "srund@nd.edu" #required
   
-     #========
-     
-     # sample_value
+ 
+  
+  
+  
+  #========
+  
+  # sample_value
   # sample_unit (empty)
   # measurement_unit
   # value_transform (empty)
@@ -1199,6 +1204,74 @@ saf2_to_VectorByte <- function(byte){
   # date_uncertainty_due_to_graph - could fill in uniformly (FALSE) or blank
   # time_shift_possible
   
+  print("SAF1 to SAF2 convertor complete. Consider running VbyteColRemover() next")
+  
   return(byte)
 }
+
+VbyteColRemover <- function(byte){
+
+keeps <- c("title"
+           , "collection_author_name"
+           , "dataset_citation"
+           , "description"
+           , "url"
+           , "contact_name"
+           , "contact_affiliation"
+           , "email"
+           , "project_identifier"
+           , "publication_status"
+           , "dataset_license"
+           , "data_rights"
+           , "embargo_release_date"
+           , "location_description"
+           , "study_collection_area"
+           , "geo_datum"
+           , "gps_obfuscation_info"
+           , "species_id_method"
+           , "study_design"
+           , "sampling_strategy"
+           , "sampling_method"
+           , "sampling_protocol"
+           , "measurement_unit"
+           , "value_transform"
+           , "sample_start_date"
+           , "sample_end_date"
+           , "sample_start_time"
+           , "sample_end_time"
+           , "sample_value"
+           , "sample_sex"
+           , "sample_stage"
+           , "sample_location"
+           , "sample_collection_area"
+           , "sample_lat_dd"
+           , "sample_long_dd"
+           , "sample_environment"
+           , "additional_location_info"
+           , "sample_name"
+           , "digitized_from_graph"
+           , "date_uncertainty_due_to_graph"
+           , "time_shift_possible"
+           , "curatedbydoi"
+           , "curatedbycitation "
+           , "kingdom"
+           , "phylum"
+           , "class"
+           , "order"
+           , "family"
+           , "genus"
+           , "species"
+           , "submittedby"
+           , "contributoremail"
+)
+
+
+
+byte <- byte[,(names(byte) %in% keeps)]
+
+return(byte)
+}
+
+
+
 
