@@ -322,9 +322,11 @@ library(rlang)
           print(unique(dataIn$NotEmpty))
           
           dataIn$sample_count[is.na(dataIn$NotEmpty)] <- -1 # Assigns -1 to all sample_counts from empty collections
-          dataIn$repeateInstance <- duplicated(dataIn$collection_ID) # Marks each first sample in a collection with FALSE    dataIn <- dataIn[!(dataIn$sample_count == -1 & dataIn$repeateInstance == TRUE),] # This line leaves only one species per collection, that was blank
+          dataIn$repeateInstance <- duplicated(dataIn$collection_ID) # Marks each first sample in a collection with FALSE    
+          dataIn <- dataIn[!(dataIn$sample_count == -1 & dataIn$repeateInstance == TRUE),] # This line leaves only one species per collection, that was blank
           dataIn$species[dataIn$sample_count == -1] <- "BLANK" 
           dataIn$vbsp[dataIn$sample_count == -1] <- "BLANK"
+          dataIn$repeateInstance <- NULL
       
       # Remove blanks and zeros, deal with BLANKS
       
@@ -617,7 +619,7 @@ library(rlang)
         mydata.config <- rbind(mydata.config, c("  - study_protocol_name : RESTING BOX"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type : adult arthropod specimen collection process"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_source_ref : OBI"))
-        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002940"))
+        mydata.config <- rbind(mydata.config, c("    study_protocol_type_term_accession_number : OBI_0002904"))
         mydata.config <- rbind(mydata.config, c("    study_protocol_description : Mosquitoes were collected using a resting box")) 
       }
       
@@ -698,6 +700,7 @@ library(rlang)
                             , "GRAVID"
                             , "BGSENT"
                             , "NJLT"
+                            , "EVS"
                             , "RESTING BOX")
       
       attractantsinStudy <- unique(dataIn$attractant) # a vector with all the unique attractant values
@@ -806,6 +809,7 @@ library(rlang)
           mydata.config <- rbind(mydata.config, c("  NJLT : OBI_0002935")) 
         }   
       
+        
       # Clean up config file
       
       mydata.config$key <- paste(mydata.config$key,"",mydata.config$value)
